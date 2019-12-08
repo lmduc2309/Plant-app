@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import { Container, View, Left, Right, Button, Icon, Item, Input } from 'native-base';
 import {Alert, Platform} from 'react-native';
 import { Actions } from 'react-native-router-flux';
-
+import { firebaseApp } from '../FirebaseConfig';
 // Our custom files and classes import
 import Colors from '../Colors';
 import Text from '../component/Text';
@@ -17,7 +17,7 @@ export default class Login extends Component {
   constructor(props) {
       super(props);
       this.state = {
-        username: '',
+        email: '',
         password: '',
         hasError: false,
         errorText: ''
@@ -53,7 +53,7 @@ export default class Login extends Component {
           </View>
           <Item>
               <Icon active name='ios-person' style={{color: "#687373"}}  />
-              <Input placeholder='Username' onChangeText={(text) => this.setState({username: text})} placeholderTextColor="#687373" />
+              <Input placeholder='email' onChangeText={(text) => this.setState({email: text})} placeholderTextColor="#687373" />
           </Item>
           <Item>
               <Icon active name='ios-lock' style={{color: "#687373"}} />
@@ -70,23 +70,18 @@ export default class Login extends Component {
     );
   }
 
-  login() {
-    if (this.state.username === 'Lmduc2309' && this.state.password === '123456')
-    onPress: () => Actions.Home();
-     
-    this.setState({hasError: false, errorText: 'Invalid username or password !'});
-  }
+  
   DangNhap() {
-    if (this.state.username === 'Lmduc2309' && this.state.password === '123456')
-    {
+    firebaseApp.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+    .then(() => {
         Alert.alert(
             'Alert Title',
-            'Login successfully ' + this.state.username,
+            'Login successfully ' + this.state.email,
             [
               
               {
                 text: 'Cancel',
-                onPress: () => Actions.login(),
+                onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
               },
               {text: 'OK', onPress: () => Actions.home()},
@@ -94,11 +89,26 @@ export default class Login extends Component {
             {cancelable: false},
           );
           this.setState({
-              username: '',
+              email: '',
               password: '',
           })
-    }
-    
+    })
+    .catch(function(error) {
+        Alert.alert(
+            'Alert Title',
+            'Login failed',
+            [
+              {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {text: 'OK', onPress: () => Actions.login()},
+            ],
+            {cancelable: false},
+          );
+      });
 }
 
 }
