@@ -61,7 +61,7 @@ export default class Login extends Component {
           </Item>
           {this.state.hasError?<Text style={{color: "#c0392b", textAlign: 'center', marginTop: 10}}>{this.state.errorText}</Text>:null}
           <View style={{alignItems: 'center'}}>
-            <Button onPress={() => this.DangNhap()} style={{backgroundColor: Colors.navbarBackgroundColor, marginTop: 20}}>
+            <Button onPress={() => this.DangNhap()} style={{backgroundColor: Colors.navbarBackgroundColor, marginTop: 20, height: 20, width: 50}}>
               <Text style={{color: '#fdfdfd'}}>Login</Text>
             </Button>
           </View>
